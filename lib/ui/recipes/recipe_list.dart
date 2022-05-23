@@ -1,7 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-// TODO: Add imports
+import '../widgets/custom_dropdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../colors.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class RecipeList extends StatefulWidget {
 }
 
 class _RecipeListState extends State<RecipeList> {
-  // TODO: Add key
+  static const _prefSearchKey = 'previousSearches';
   late TextEditingController searchTextController;
   final ScrollController _scrollController = ScrollController();
   List currentSearchList = [];
@@ -22,12 +23,12 @@ class _RecipeListState extends State<RecipeList> {
   bool hasMore = false;
   bool loading = false;
   bool inErrorState = false;
-  // TODO: Add searches array
 
+  List<String> previousSearches = <String>[];
   @override
   void initState() {
     super.initState();
-    // TODO: Call getPreviousSearches
+    getPreviousSearches();
     searchTextController = TextEditingController(text: '');
     _scrollController
       ..addListener(() {
@@ -56,7 +57,17 @@ class _RecipeListState extends State<RecipeList> {
     super.dispose();
   }
 
-  // TODO: Add savePreviousSearches
+  void savePreviousSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(_prefSearchKey, previousSearches);
+  }
+
+  void getPreviousSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(_prefSearchKey)) {
+      previousSearches = prefs.getStringList(_prefSearchKey) ?? <String>[];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +110,11 @@ class _RecipeListState extends State<RecipeList> {
                       autofocus: false,
                       controller: searchTextController,
                       onChanged: (query) => {
-                        if (query.length >= 3) {
+                        if (query.length >= 3)
+                          {
                             // Rebuild list
-                            setState(() {
+                            setState(
+                              () {
                                 currentSearchList.clear();
                                 currentCount = 0;
                                 currentEndPosition = pageCount;
@@ -122,7 +135,19 @@ class _RecipeListState extends State<RecipeList> {
     );
   }
 
-  // TODO: Add startSearch
+  void startSearch(String value) {
+    setState(() {
+      currentSearchList.clear();
+      currentCount = 0;
+      currentEndPosition = pageCount;
+      currentStartPosition = 0;
+      hasMore = true;
+      if (previousSearches.contains(value)) {
+        previousSearches.add(value);
+        savePreviousSearches();
+      }
+    });
+  }
 
   Widget _buildRecipeLoader(BuildContext context) {
     if (searchTextController.text.length < 3) {
