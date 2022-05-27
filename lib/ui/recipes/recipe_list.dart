@@ -107,15 +107,12 @@ class _RecipeListState extends State<RecipeList> {
             const SizedBox(
               width: 6.0,
             ),
-            // *** Start Replace
 
             Expanded(
-                // 3
                 child: TextField(
               decoration: const InputDecoration(
                   border: InputBorder.none, hintText: 'Search'),
               autofocus: false,
-              // 4
               textInputAction: TextInputAction.done,
               onSubmitted: (value) {
                 if (!previousSearches.contains(value)) {
