@@ -18,7 +18,7 @@ class APIRecipeQuery {
   bool more;
   int count;
 
-  List<APIHits>? hits;
+  List<APIHits> hits;
 
   APIRecipeQuery({
     required this.query,

@@ -13,8 +13,8 @@ APIRecipeQuery _$APIRecipeQueryFromJson(Map<String, dynamic> json) =>
       to: json['to'] as int,
       more: json['more'] as bool,
       count: json['count'] as int,
-      hits: (json['hits'] as List<dynamic>?)
-          ?.map((e) => APIHits.fromJson(e as Map<String, dynamic>))
+      hits: (json['hits'] as List<dynamic>)
+          .map((e) => APIHits.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
