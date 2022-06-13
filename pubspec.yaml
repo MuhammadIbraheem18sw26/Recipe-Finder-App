@@ -22,6 +22,9 @@ dependencies:
   shared_preferences: ^2.0.15
   json_annotation: ^4.5.0
   http: ^0.13.4
+  chopper: ^4.0.5
+  logging: ^1.0.2
+
 
 
 
@@ -33,7 +36,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.1.11
   json_serializable: ^6.2.0
-
+  chopper_generator: ^4.0.5
 
 
 flutter:
